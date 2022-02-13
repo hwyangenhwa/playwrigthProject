@@ -1,5 +1,4 @@
-import { test } from "@playwright/test";
-import { DCT_ROWS } from "opencv4nodejs";
+import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
   await page.goto('https://store.kakao.com/',
@@ -10,9 +9,9 @@ test.beforeEach(async ({ page }) => {
   });
 
 test('kakaoShoping Header Check', async ({ page }) => {
-  const kakaoShopHeader = await page.locator("ul[class='list_gnb'] >> li")
-  const count = await kakaoShopHeader.count()
+  const compareKakaShopHeader = [ '홈', '브랜드데이new', '베스트', '라이브', '기획전' ];
   
-  for (let i=0; i < count; ++i)
-    console.log(await kakaoShopHeader.nth(i).textContent());
+  const kakaoShopHeader = await page.locator("ul[class='list_gnb'] >> li");
+  const texts = await kakaoShopHeader.allTextContents();
+  await expect(texts == compareKakaShopHeader);
 });
